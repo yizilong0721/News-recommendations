@@ -1,0 +1,88 @@
+<!--新闻导航栏和页面分类页面，主页分页在home_page.html，其他分类在home_page_cal.html-->
+<!--继承了home/layout.html模板-->
+{% extends 'home/layout.html' %}
+<!---->
+{% import 'ui/home_page.html' as pg %}
+{% import 'ui/home_page_cal.html' as pg_cal %}
+<!--导航栏分类新闻-->
+{% block content %}
+<!--新闻列表-->
+<section id="movielist" style="margin-top:30px">
+    <div class="container">
+        <div class="row wow fadeIn" data-wow-delay="0.6s">
+            <div class="col-md-12 table-responsive">
+                <table class="table text-left table-bordered" id="movietags">
+                    <tr ><th colspan="2" style="font-size:23px;color:#5e5e5e;;text-align:center;font-weight:bold;font-family: 'Brush Script MT', cursive;">{% if  not news_tag.name%}
+                        当前页为全部新闻
+                        {% else %}
+                        当前页为{{news_tag.name}}
+                        {% endif %}
+                    </th></tr>
+                    <td style="width:10%;color: #3c6de0;font-weight: bold">&nbsp;&nbsp;&nbsp;新闻标签</td>
+                    <td style="width:90%;">
+                        <a href="{{ url_for('home.index',page=1) }}"
+                           class="label label-info"><span
+                                class="glyphicon glyphicon-tag"></span>&nbsp;全部新闻</a>&nbsp;&nbsp;
+                        {% for v in tags %}
+                        <!--&star={{ p['star'] }}&time={{ p['time'] }}&pm={{ p['pm'] }}&cm={{ p['cm'] }}可以删了-->
+                        <a href="{{ url_for('home.index',page=1) }}?tid={{ v.id }}"
+                           class="label label-info"><span
+                                class="glyphicon glyphicon-tag"></span>&nbsp;{{ v.name }}</a>
+                        &nbsp;
+                        {% endfor %}
+
+                    </td>
+                    </tr>
+
+
+                </table>
+            </div>
+
+
+            {% for v in page_data.items %}
+            <div class="col-md-3">
+                <div class="movielist text-center">
+                    <!--<img data-original="holder.js/262x166"
+                             class="img-responsive lazy center-block" alt="">-->
+                    {# <a href="{{ url_for('home.play',id=v.id,page=1) }}" target="_blank" role="button">#}
+                    <a href="{{ url_for('home.play',id=v.id,page=1) }}" role="button">
+                        <img src="{{ url_for('static',filename='uploads/' + v.logo) }}"
+                             style="width: 300px;height: 190px"
+                             class="img-responsive center-block" alt="{{ v.title }}" title="{{ v.title }}"></a>
+                    <div class="text-left" style="margin-left:auto;margin-right:auto;width:210px;height:80px;">
+                        <span style="color:#727272;font-style: italic;font-weight: bolder">{{ v.title }}</span><br>
+                        <div>
+                            {# 实心星星#}
+                            {% for val in range(1,1+v.star) %}
+                            <span class="glyphicon glyphicon-star" style="color:#FFD119"></span>
+                            {% endfor %}
+                            {# 空心星星#}
+                            {% for val in range(1,6-v.star) %}
+                            <span class="glyphicon glyphicon-star-empty" style="color:#FFD119"></span>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                    {# <a href="{{ url_for('home.play',id=v.id,page=1) }}" class="btn btn-primary" target="_blank" #}
+                          {# role="button"><span class="glyphicon glyphicon-play"></span>&nbsp;查看</a>#}
+                    <a href="{{ url_for('home.play',id=v.id,page=1) }}" class="btn btn-primary"
+                       role="button"><span class="glyphicon glyphicon-play"></span>&nbsp;查看</a>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="col-md-12">
+                {# 引入后台页码模板,通过tid进行判断分类 #}
+                {% if page_data.key==0 %}
+                {{ pg.page(page_data,'home.index') }}
+                {% else %}
+                {{ pg_cal.page(page_data,'home.index') }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+<!--新闻列表-->
+
+
+{% endblock %}

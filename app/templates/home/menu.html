@@ -1,0 +1,29 @@
+<div class="col-md-3">
+    <div class="list-group">
+        <a id="m-1" href="{{ url_for('home.user') }}" class="list-group-item">
+            <span class="glyphicon glyphicon-user"></span>&nbsp;个人中心
+        </a>
+        <a id="m-2" href="{{ url_for('home.pwd') }}" class="list-group-item">
+            <span class="glyphicon glyphicon-lock"></span>&nbsp;修改密码
+        </a>
+        <a id="m-4" href="{{ url_for('home.loginlog',page=1) }}" class="list-group-item">
+            <span class="glyphicon glyphicon-calendar"></span>&nbsp;登录日志
+        </a>
+        <a id="m-5" href="{{ url_for('home.newscol',page=1) }}" class="list-group-item">
+            <span class="glyphicon glyphicon-heart"></span>&nbsp;收藏新闻
+        </a>
+         <a id="m-6" href="{{ url_for('home.newsrecommend') }}" class="list-group-item">
+            <span class="glyphicon glyphicon-heart"></span>&nbsp;基于物品的协同过滤推荐
+        </a>
+         <a id="m-7" href="{{ url_for('home.newsrecommend2') }}" class="list-group-item">
+            <span class="glyphicon glyphicon-heart"></span>&nbsp;基于用户的协同过滤推荐
+        </a>
+         <a id="m-8" href="{{ url_for('home.data1') }}" class="list-group-item">
+            <span class="glyphicon glyphicon-heart"></span>&nbsp;各类别新闻数量统计
+        </a>
+        <a id="m-9" href="{{ url_for('home.data2') }}" class="list-group-item">
+            <span class="glyphicon glyphicon-heart"></span>&nbsp;新闻浏览量排行榜
+        </a>
+
+    </div>
+</div>

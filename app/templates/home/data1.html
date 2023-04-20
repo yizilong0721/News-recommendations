@@ -1,0 +1,117 @@
+{% extends 'home/home.html' %}
+
+{% import 'ui/home_page.html' as pg %}
+
+{% block css %}
+<style>
+        .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+            padding-right: 3px;
+            padding-left: 3px;
+        }
+
+
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+{% include 'home/menu.html' %}
+<div class="col-md-9">
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;各类别新闻数量统计</h3>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-12">
+
+                <div id="map" style="height:500px;"></div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{#添加JS:当鼠标点击模块时,用于激活会员中心的商品收藏模块#}
+{% block js %}
+<script>
+        $(document).ready(function () {
+            $('#m-8').addClass('active');
+        });
+
+
+
+</script>
+<script src="{{ url_for('static',filename='echarts.min.js') }}"></script>
+<script>
+
+       var data = {{ page_data|tojson }};
+       xdata = []
+       ydata = []
+       for(j = 0,len=data.length; j < len; j++) {
+            xdata.push(data[j].xdata)
+            ydata.push(data[j].ydata)
+       }
+
+        var seriesData = [];
+		for (j = 0, len = data.length; j < len; j++) {
+			seriesData.push({
+				name : xdata[j],
+				value : ydata[j]
+			});
+		}
+
+       	// 指定图表的配置项和数据
+		var option = {
+		    title : {
+				text : "各类别新闻数量统计",
+                left: 'center',
+                top: '3%'
+		    },
+            //设置鼠标悬浮时的提示信息
+			tooltip : {
+			    //将触发工具提示或数据缩放  其他可能的触发类型包括“axis”（触发轴上的数据）和“none”（禁用触发）
+				trigger : 'item',
+				//设置提示信息的显示格式 a表示系列名称，b表示数据项名称，c表示数据项值，d表示百分比
+				formatter : '{a} <br/>{b} : {c} ({d}%)'
+			},
+			//设置图例
+			legend : {
+				type : 'scroll',    //当图例过长时可以滚动显示
+				orient : 'vertical',  //图例的方向  图例垂直显示
+				right : 10,
+				top : 30,
+				bottom : 20,
+				data : xdata
+			},
+			//设置数据系列
+			series : [ {
+				name : "新闻类别",
+				type : 'pie',
+				radius : '80%',
+				//宽高比例
+				center : [ '50%', '55%' ],
+				//每次只能选中一个数据项
+				selectedMode : 'single',
+				data : seriesData,
+				emphasis : {
+				//为强调样式设置一个阴影效果，包括阴影的模糊度为10，X方向上的偏移量为0，颜色为半透明黑色。
+					itemStyle : {
+						shadowBlur : 10,
+						shadowOffsetX : 0,
+						shadowColor : 'rgba(0, 0, 0, 0.5)'
+					}
+				}
+			}]
+		};
+
+    var myChart = echarts.init(document.getElementById('map'));
+    myChart.setOption(option);
+
+
+
+
+</script>
+{% endblock %}
